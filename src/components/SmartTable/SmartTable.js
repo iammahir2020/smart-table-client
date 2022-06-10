@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import AddInformation from "./AddInformation";
+// import AddInformation from "./AddInformation";
 import InformationRow from "./InformationRow";
 
 const SmartTable = () => {
@@ -11,7 +11,7 @@ const SmartTable = () => {
   const [input, setInput] = useState("");
 
   useEffect(() => {
-    const url = `http://localhost:5000/informationCount?type=${type}&input=${input}`;
+    const url = `https://smart-data-table.herokuapp.com/informationCount?type=${type}&input=${input}`;
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
@@ -22,7 +22,7 @@ const SmartTable = () => {
   }, [size, type, input]);
 
   useEffect(() => {
-    const url = `http://localhost:5000/informationBulk?page=${page}&size=${size}&type=${type}&input=${input}`;
+    const url = `https://smart-data-table.herokuapp.com/informationBulk?page=${page}&size=${size}&type=${type}&input=${input}`;
     fetch(url)
       .then((res) => res.json())
       .then((data) => setInformations(data));
@@ -30,9 +30,14 @@ const SmartTable = () => {
 
   return (
     <div>
-      <h2>Smart Table</h2>
-      <AddInformation></AddInformation>
-      <div className="flex justify-between items-center">
+      <h2 className="text-center text-xl lg:text-2xl">
+        Technical Assesment Task for Web Developer Intern
+      </h2>
+      <h2 className="text-center text-2xl lg:text-4xl font-semibold">
+        Smart Data Table
+      </h2>
+      {/* <AddInformation></AddInformation> */}
+      <div className="flex flex-col-reverse lg:flex-row justify-between items-left lg:items-center">
         <div className="flex gap-5 items-center my-5">
           <span>Show</span>
           <select
@@ -47,7 +52,6 @@ const SmartTable = () => {
             <option value="50">50</option>
           </select>
           <span>Entries</span>
-          <span>pageCount:{pageCount}</span>
         </div>
         <div className="flex gap-5 items-center my-5">
           <span>Search By :</span>
@@ -76,33 +80,49 @@ const SmartTable = () => {
         <table className="table w-full">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Position</th>
-              <th>Office</th>
-              <th>Age</th>
-              <th>Salary</th>
+              <th className="text-lg">Name</th>
+              <th className="text-lg">Position</th>
+              <th className="text-lg">Office</th>
+              <th className="text-lg">Age</th>
+              <th className="text-lg">Salary</th>
             </tr>
           </thead>
           <tbody>
-            {informations?.map((information) => (
+            {pageCount === 0 ? (
+              <tr>
+                <td className="text-center" colSpan="5">
+                  No matching records found
+                </td>
+              </tr>
+            ) : (
+              informations?.map((information, index) => (
+                <InformationRow
+                  key={information._id}
+                  information={information}
+                  index={index}
+                ></InformationRow>
+              ))
+            )}
+            {/* {informations?.map((information, index) => (
               <InformationRow
                 key={information._id}
                 information={information}
+                index={index}
               ></InformationRow>
-            ))}
+            ))} */}
           </tbody>
           <tfoot>
             <tr>
-              <th>Name</th>
-              <th>Position</th>
-              <th>Office</th>
-              <th>Age</th>
-              <th>Salary</th>
+              <th className="text-lg">Name</th>
+              <th className="text-lg">Position</th>
+              <th className="text-lg">Office</th>
+              <th className="text-lg">Age</th>
+              <th className="text-lg">Salary</th>
             </tr>
           </tfoot>
         </table>
       </div>
-      <div className="my-5 flex justify-center">
+      <div className="my-5 flex flex-col items-center justify-center">
         <div className="btn-group">
           {[...Array(pageCount).keys()].map((number) => (
             <button

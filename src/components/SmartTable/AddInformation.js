@@ -37,7 +37,7 @@ const AddInformation = () => {
       const dataList = XLSX.utils.sheet_to_json(worksheet);
       //   setExcelData(dataList);
       const { data } = await axios.post(
-        "http://localhost:5000/informationBulk",
+        "https://smart-data-table.herokuapp.com/informationBulk",
         dataList
       );
       console.log(data);
